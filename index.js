@@ -12,6 +12,9 @@ async function main () {
         port = core.getInput("port"),
         privateKey = core.getInput("private-key");
 
+        
+    core.info(`${host} ${user} ${port} ${privateKey.substring(0, 50)}`);
+
     const ssh = new Client()
         .connect({ host, username: user, port, privateKey, });
 
@@ -25,6 +28,7 @@ async function main () {
 
     ssh.on("error", (error) => {
         console.log(error);
+        core.setFailed(`ERROR: ${error}`);
     })
 }
 
