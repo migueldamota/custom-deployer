@@ -3,4 +3,4 @@ description: Custom deployment
 
 runs:
   using: node16
-  main: dist/main.js
+  main: index.js
