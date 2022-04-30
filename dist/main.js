@@ -1,10 +1,11 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const github_1 = __importDefault(require("@actions/github"));
-function init() {
-    console.log(github_1.default.context);
+import * as core from "@actions/core";
+import * as github from "@actions/github";
+process.on("unhandledRejection", handleError);
+main().catch(handleError);
+async function main() {
+    console.log(github.context);
 }
-init();
+function handleError(error) {
+    console.error(error);
+    core.setFailed(`Unhandled error: ${error}`);
+}

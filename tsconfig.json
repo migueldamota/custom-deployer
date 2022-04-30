@@ -1,18 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "lib": [
-      "es6",
-      "DOM"
-    ],
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "declaration": true,
+    "target": "es2018",
+    "moduleResolution": "node",
     "strict": true,
-    "noImplicitAny": false,
-    "esModuleInterop": true,
-    "skipLibCheck": true
+    "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["__test__", "lib", "node_modules"]
+  "exclude": ["__test__"]
 }

@@ -1,8 +1,14 @@
-import core from "@actions/core";
-import github from "@actions/github";
+import * as core from "@actions/core";
+import * as github from "@actions/github";
 
-function init () {
+process.on("unhandledRejection", handleError)
+main().catch(handleError);
+
+async function main () {
     console.log(github.context);
 }
 
-init();
+function handleError (error: any) {
+    console.error(error);
+    core.setFailed(`Unhandled error: ${error}`);
+}
