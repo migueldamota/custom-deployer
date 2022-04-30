@@ -23,9 +23,7 @@ async function main () {
         core.startGroup("Create folders");
         ssh.exec(`mkdir ${dir} -p`, () => core.endGroup());
         
-        core.startGroup("Getting repo");
-        ssh.exec(`${github.token}`, () => core.endGroup());
-    });
+        core.info(`${github.token}`);
 
     ssh.on("error", (error) => {
         console.log(error);
