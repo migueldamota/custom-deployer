@@ -12,11 +12,8 @@ async function main () {
         port = core.getInput("port"),
         privateKey = core.getInput("private-key");
 
-        
-    core.info(`${host} ${user} ${port} ${privateKey.substring(0, 50)}`);
-
     const ssh = new Client()
-        .connect({ host, username: user, port, privateKey, });
+        .connect({ host, username: user, port, password: core.getInput("password"), });
 
     ssh.on("ready", async function () {
         const { runNumber: run } = github.context;

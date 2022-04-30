@@ -18,6 +18,10 @@ inputs:
     required: true
     description: User
 
+  password:
+    required: true
+    description: Password
+
   port:
     default: 22
     description: Port
