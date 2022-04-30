@@ -20,7 +20,13 @@ async function main () {
 
         const sshURL = github.context.payload.repository.ssh_url;
 
-        core.info(github.context);
+        core.group("Create folders", async () => {
+            ssh.exec(`mkdir ${dir} -p`);
+        });
+
+        core.group("Getting repo", async () => {
+            ssh.exec(`${github.token}`);
+        })
     });
 
     ssh.on("error", (error) => {
