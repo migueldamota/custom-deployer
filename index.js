@@ -25,6 +25,7 @@ async function main () {
         
         core.info(`mkdir ${dir} -p`);
         core.info(`${github.token}`);
+    });
 
     ssh.on("error", (error) => {
         console.log(error);
