@@ -1,6 +1,27 @@
 name: 'migueldamota/deploy'
 description: Custom deployment
 
+inputs:
+  private-key:
+    required: true
+    description: SSH private key
+
+  dir:
+    required: true
+    description: Directory
+
+  host:
+    required: true
+    description: Host
+
+  user:
+    required: true
+    description: User
+
+  port:
+    default: 22
+    description: Port
+
 runs:
   using: 'node16'
   main: index.js
