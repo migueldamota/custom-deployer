@@ -1,6 +1,6 @@
-name: Miggi Deployer
+name: 'migueldamota/deploy'
 description: Custom deployment
 
 runs:
-  using: node16
+  using: 'node16'
   main: index.js
