@@ -15,13 +15,17 @@ async function main () {
     const ssh = new Client()
         .connect({ host, username: user, port, privateKey, });
 
-    const { runNumber: run } = github.context;
+    ssh.on("ready", async function () {
+        const { runNumber: run } = github.context;
 
-    core.warning(`GitHub SSH: ${github.context.payload.repository.ssh_url}`);
-    core.warning(`Run: ${run}`);
-    core.info(github.context);
+        const sshURL = github.context.payload.repository.ssh_url;
 
+        core.info(github.context);
+    });
 
+    ssh.on("error", (error) => {
+        console.log(error);
+    })
 }
 
 function handleError (error) {
