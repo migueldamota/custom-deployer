@@ -5,7 +5,8 @@ process.on("unhandledRejection", handleError);
 main().catch(handleError);
 
 async function main () {
-    core.info("Hello!");
+    console.log(github.context)
+    core.info(github.context);
 }
 
 function handleError (error) {
