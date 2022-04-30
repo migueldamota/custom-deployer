@@ -2,5 +2,5 @@ name: Miggi Deployer
 description: Custom deployment
 
 runs:
-  using: node17
+  using: node16
   main: dist/main.js
