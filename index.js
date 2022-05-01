@@ -28,6 +28,8 @@ async function main () {
 
 
         core.info("Successfully deployed!");
+
+        ssh.destroy();
         core.setOutput("deployed", "true");
     });
 
