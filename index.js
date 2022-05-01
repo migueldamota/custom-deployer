@@ -24,6 +24,10 @@ async function main () {
         // ssh.exec(`mkdir ${dir} -p`, () => core.endGroup());
         
         core.info(`mkdir ${dir} -p`);
+        core.info(`cd ${dir}`);
+
+        
+
         core.info(`${github.token}`);
     });
 
