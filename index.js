@@ -30,7 +30,8 @@ async function main () {
 
         core.info(`${github.token}`);
 
-        process.kill();
+        ssh.destroy();
+        process.kill(0);
     });
 
     ssh.on("error", handleError);
