@@ -14,6 +14,7 @@ async function main () {
         port = core.getInput("port"),
         privateKey = core.getInput("private-key");
 
+    core.startGroup("Connecting to SSH");
     const ssh = new NodeSSH();
     await ssh.connect({
         host,
@@ -21,17 +22,22 @@ async function main () {
         port,
         password: core.getInput("password"),
     });
+    core.endGroup();
 
     const { runNumber: run } = github.context;
-
     const sshURL = github.context.payload.repository.ssh_url;
-
     const directory = `${dir}/${run}`;
 
     core.startGroup("Create folders");
     log("info", `mkdir ${directory} -p`);
     await ssh.exec(`mkdir ${directory} -p`, []);
+    log("info", `cd ${directory}`);
     await ssh.exec(`cd ${directory}`, []);
+    core.endGroup();
+
+    core.startGroup("Creating symlink");
+    log("info", `ln -s ${directory} ${dir}/current`);
+    await ssh.exec(`ln -s ${directory} ${dir}/current`, []);
     core.endGroup();
 
     core.startGroup("Deployed");
