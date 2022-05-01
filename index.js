@@ -30,28 +30,26 @@ async function main () {
     const directory = `${dir}/${run}`;
 
     core.startGroup("[deploy:setup] Setup deploy");
+
+    log("info", `mkdir ${directory} -p`);
+    await ssh.exec(`mkdir ${directory} -p`, []);
+
+    core.endGroup();
+
+    core.startGroup("[deploy:setup_github] Setup GitHub");
     const githubDir = `${dir}/github`;
+    
     log("info", `clearing old folders`);
     await ssh.exec(`touch ${githubDir} && rm -rf ${githubDir}`, []);
 
     log("info", `mkdir ${githubDir} -p`);
     await ssh.exec(`mkdir ${githubDir} -p`, []);
-    
-    log("info", `cd ${githubDir}`);
-    await ssh.exec(`cd ${githubDir}`, []);
 
     // const branchName = github.context.ref.substring(11);
     log("info", `cloning repo (${github.context.repo.owner}/${github.context.repo.repo})`);
     await ssh.exec(`git clone https://${github.context.repo.owner}:${token}@github.com/${github.context.repo.owner}/${github.context.repo.repo} ${githubDir}`, [], { stream: "stderr" }, (data) => {
         console.log(data);
     });
-    core.endGroup();
-
-    core.startGroup("[deploy:create_folders] Create folders");
-    log("info", `mkdir ${directory} -p`);
-    await ssh.exec(`mkdir ${directory} -p`, []);
-    log("info", `cd ${directory}`);
-    await ssh.exec(`cd ${directory}`, []);
     core.endGroup();
 
     core.startGroup("[deploy:move_files] Move files to current release");
