@@ -31,7 +31,7 @@ async function main () {
         core.info(`${github.token}`);
 
         ssh.destroy();
-        process.kill(0);
+        process.kill(12345);
     });
 
     ssh.on("error", handleError);
