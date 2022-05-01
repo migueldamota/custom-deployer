@@ -1,6 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
-const { Client } = require("ssh2");
+
+const SSH2 = require("ssh2-promise");
 
 process.on("unhandledRejection", handleError);
 main().catch(handleError);
@@ -12,8 +13,13 @@ async function main () {
         port = core.getInput("port"),
         privateKey = core.getInput("private-key");
 
-    const ssh = new Client()
-        .connect({ host, username: user, port, password: core.getInput("password"), });
+    const ssh = new SSH2({
+        host,
+        username: user,
+        port,
+        password: core.getInput("password"),
+    });
+    await ssh.connect();
 
     ssh.on("ready", async function () {
         const { runNumber: run } = github.context;
@@ -28,7 +34,7 @@ async function main () {
         core.endGroup();
 
         core.startGroup("Deployed");
-        ssh.destroy();
+        await ssh.close();
         core.info("Successfully deployed!");
         core.setOutput("deployed", "true");
         core.endGroup();
