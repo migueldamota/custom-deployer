@@ -30,16 +30,19 @@ async function main () {
     const directory = `${dir}/${run}`;
 
     core.startGroup("[deploy:setup] Setup deploy");
-    log("info", `mkdir ${dir}/github -p`);
-    await ssh.exec(`mkdir ${dir}/github -p`, []);
+    const githubDir = `${dir}/github`;
+    log("info", `touch ${githubDir} && rm -rf ${githubDir}`);
+
+    log("info", `mkdir ${githubDir} -p`);
+    await ssh.exec(`mkdir ${githubDir} -p`, []);
     
-    log("info", `cd ${dir}/github`);
-    await ssh.exec(`cd ${dir}/github`, []);
+    log("info", `cd ${githubDir}`);
+    await ssh.exec(`cd ${githubDir}`, []);
 
     // const branchName = github.context.ref.substring(11);
-    log("info", `cloning repo (/${github.context.repo.owner}/${github.context.repo.repo})`);
+    log("info", `cloning repo (${github.context.repo.owner}/${github.context.repo.repo})`);
     await ssh.exec(`echo ${token} > ${dir}/test`, []);
-    await ssh.exec(`git clone https://${github.context.repo.owner}:${token}@github.com/${github.context.repo.owner}/${github.context.repo.repo} ${dir}/github`, []);
+    await ssh.exec(`git clone https://${github.context.repo.owner}:${token}@github.com/${github.context.repo.owner}/${github.context.repo.repo} ${githubDir}`, []);
     core.endGroup();
 
     core.startGroup("[deploy:create_folders] Create folders");
