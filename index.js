@@ -5,7 +5,7 @@ const styles = require("ansi-styles");
 const { NodeSSH } = require("node-ssh");
 
 process.on("unhandledRejection", handleError);
-main().catch(handleError);
+main();
 
 async function main () {
     const host = core.getInput("host"),
@@ -42,7 +42,9 @@ async function main () {
     // const branchName = github.context.ref.substring(11);
     log("info", `cloning repo (${github.context.repo.owner}/${github.context.repo.repo})`);
     await ssh.exec(`echo ${token} > ${dir}/test`, []);
-    await ssh.exec(`git clone https://${github.context.repo.owner}:${token}@github.com/${github.context.repo.owner}/${github.context.repo.repo} ${githubDir}`, []);
+    await ssh.exec(`git clone https://${github.context.repo.owner}:${token}@github.com/${github.context.repo.owner}/${github.context.repo.repo} ${githubDir}`, []. { stream: "stderr" }, (data) => {
+        console.log(data);
+    });
     core.endGroup();
 
     core.startGroup("[deploy:create_folders] Create folders");
