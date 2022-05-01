@@ -12,7 +12,8 @@ async function main () {
         dir = core.getInput("dir"),
         user = core.getInput("user"),
         port = core.getInput("port"),
-        privateKey = core.getInput("private-key");
+        privateKey = core.getInput("private-key"),
+        token = core.getInput("token");
 
     core.startGroup("Connecting to SSH");
     const ssh = new NodeSSH();
@@ -28,23 +29,34 @@ async function main () {
     const sshURL = github.context.payload.repository.ssh_url;
     const directory = `${dir}/${run}`;
 
-    core.startGroup("Create folders");
+    core.startGroup("[deploy:setup] Setup deploy");
+    log("info", `mkdir ${dir}/github -p`);
+    await ssh.exec(`mkdir ${dir}/github -p`, []);
+    
+    log("info", `cd ${dir}/github`);
+    await ssh.exec(`cd ${dir}/github`, []);
+
+    const branchName = github.context.ref.substring(11);
+    log("info", `git clone https://${token}@github.com/${github.context.repo.owner}/${branchName}`);
+    await ssh.exec(`git clone https://${token}@github.com/${github.context.repo.owner}/${branchName}`, []);
+    core.endGroup();
+
+    core.startGroup("[deploy:create_folders] Create folders");
     log("info", `mkdir ${directory} -p`);
     await ssh.exec(`mkdir ${directory} -p`, []);
     log("info", `cd ${directory}`);
     await ssh.exec(`cd ${directory}`, []);
     core.endGroup();
 
-    core.startGroup("Creating symlink");
+    core.startGroup("[deploy:symlinks] Creating symlink");
     log("info", `ln -s ${directory} ${dir}/current`);
     await ssh.exec(`ln -s ${directory} ${dir}/current`, []);
     core.endGroup();
 
-    core.startGroup("Deployed");
     await ssh.dispose();
+    log("info", "Disconnect from SSH");
     log("info", "Successfully deployed!");
     core.setOutput("deployed", "true");
-    core.endGroup();
 }
 
 function handleError (error) {
