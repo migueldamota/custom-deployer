@@ -12,6 +12,7 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@actions/github": "^5.0.1",
+    "ansi-styles": "^6.1.0",
     "node-ssh": "^12.0.4",
     "ssh2": "^1.10.0"
   },

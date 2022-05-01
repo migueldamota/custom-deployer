@@ -1,6 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 
+const styles = require("ansi-styles");
 const { NodeSSH } = require("node-ssh");
 
 process.on("unhandledRejection", handleError);
@@ -28,22 +29,23 @@ async function main () {
     const directory = `${dir}/${run}`;
 
     core.startGroup("Create folders");
+    log("info", `mkdir ${directory} -p`);
     await ssh.exec(`mkdir ${directory} -p`, []);
     await ssh.exec(`cd ${directory}`, []);
     core.endGroup();
 
     core.startGroup("Deployed");
     await ssh.dispose();
-    core.info("Successfully deployed!");
+    log("info", "Successfully deployed!");
     core.setOutput("deployed", "true");
     core.endGroup();
 }
 
 function handleError (error) {
-    console.error(error);
+    log("error", error);
     core.setFailed(`Unhandled error: ${error}`);
 }
 
-function log () {
-
+function log (type, message) {
+    core[type](`${styles.gray}[${styles.green.bold}DEPLOY${styles.gray}] ${styles.reset}${message}`);
 }
