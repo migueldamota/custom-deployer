@@ -20,16 +20,14 @@ async function main () {
 
         const sshURL = github.context.payload.repository.ssh_url;
 
-        // core.startGroup("Create folders");
-        // ssh.exec(`mkdir ${dir} -p`, () => core.endGroup());
+        core.startGroup("Create folders");
+        ssh.exec(`mkdir ${dir} -p`, () => 
+            ssh.exec(`cd ${dir}`, () => core.endGroup()));
+
+
         
-        core.info(`mkdir ${dir} -p`);
-        core.info(`cd ${dir}`);
-
-
-        core.info("Successfully deployed!");
-
         ssh.destroy();
+        core.info("Successfully deployed!");
         core.setOutput("deployed", "true");
     });
 
@@ -39,4 +37,8 @@ async function main () {
 function handleError (error) {
     console.error(error);
     core.setFailed(`Unhandled error: ${error}`);
+}
+
+function log () {
+
 }
