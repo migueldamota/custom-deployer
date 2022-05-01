@@ -20,15 +20,17 @@ async function main () {
 
         const sshURL = github.context.payload.repository.ssh_url;
 
+        const directory = `${dir}/${run}`;
+
         core.startGroup("Create folders");
-        ssh.exec(`mkdir ${dir} -p`, () => 
-            ssh.exec(`cd ${dir}`, () => core.endGroup()));
+        ssh.exec(`mkdir ${directory} -p`, () => 
+            ssh.exec(`cd ${directory}`, () => core.endGroup()));
 
-
-        
+        core.startGroup("Deployed");
         ssh.destroy();
         core.info("Successfully deployed!");
         core.setOutput("deployed", "true");
+        core.endGroup();
     });
 
     ssh.on("error", handleError);
