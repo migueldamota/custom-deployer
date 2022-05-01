@@ -47,5 +47,5 @@ function handleError (error) {
 }
 
 function log (type, message) {
-    core[type](`${styles.gray.open}[${styles.green.bold.open}DEPLOY${styles.gray.open}] ${styles.reset.open}${message}`);
+    core[type](`${styles.gray.open}[${styles.green.open}DEPLOY${styles.gray.open}] ${styles.reset.open}${message}`);
 }
