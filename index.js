@@ -36,9 +36,9 @@ async function main () {
     log("info", `cd ${dir}/github`);
     await ssh.exec(`cd ${dir}/github`, []);
 
-    const branchName = github.context.ref.substring(11);
+    // const branchName = github.context.ref.substring(11);
     log("info", `cloning repo`);
-    await ssh.exec(`git clone https://${github.context.repo.owner}:${token}@github.com/${github.context.repo.owner}/${branchName}`, []);
+    await ssh.exec(`git clone https://${github.context.repo.owner}:${token}@github.com/${github.context.repo.owner}/${github.context.repo.repo} .`, []);
     core.endGroup();
 
     core.startGroup("[deploy:create_folders] Create folders");
