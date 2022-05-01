@@ -30,13 +30,10 @@ async function main () {
 
         core.info(`${github.token}`);
 
-        core.setOutput("Deployed!");
+        process.kill();
     });
 
-    ssh.on("error", (error) => {
-        console.log(error);
-        core.setFailed(`ERROR: ${error}`);
-    })
+    ssh.on("error", handleError);
 }
 
 function handleError (error) {
