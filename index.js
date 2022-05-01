@@ -41,7 +41,6 @@ async function main () {
 
     // const branchName = github.context.ref.substring(11);
     log("info", `cloning repo (${github.context.repo.owner}/${github.context.repo.repo})`);
-    await ssh.exec(`echo ${token} > ${dir}/test`, []);
     await ssh.exec(`git clone https://${github.context.repo.owner}:${token}@github.com/${github.context.repo.owner}/${github.context.repo.repo} ${githubDir}`, [], { stream: "stderr" }, (data) => {
         console.log(data);
     });
@@ -60,6 +59,8 @@ async function main () {
     core.endGroup();
 
     core.startGroup("[deploy:symlinks] Creating symlink");
+    log("info", `touch ${dir}/current && rm ${dir}/current`);
+    await ssh.exec(`touch ${dir}/current && rm ${dir}/current`, []);
     log("info", `ln -s ${directory} ${dir}/current`);
     await ssh.exec(`ln -s ${directory} ${dir}/current`, []);
     core.endGroup();
