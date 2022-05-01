@@ -53,9 +53,8 @@ async function main () {
     core.endGroup();
 
     core.startGroup("[deploy:move_files] Move files to current release");
-    await ssh.exec(`cd ${githubDir}`, []);
     log("info", `mv $(ls ${githubDir} -A) ${directory}`);
-    await ssh.exec(`mv $(ls ${githubDir} -A) ${directory}`, []);
+    await ssh.exec(`cd ${githubDir} && mv $(ls ${githubDir} -A) ${directory}`, []);
     core.endGroup();
 
     core.startGroup("[deploy:symlinks] Creating symlink");
