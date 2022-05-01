@@ -31,7 +31,8 @@ async function main () {
 
     core.startGroup("[deploy:setup] Setup deploy");
     const githubDir = `${dir}/github`;
-    log("info", `touch ${githubDir} && rm -rf ${githubDir}`);
+    log("info", `clearing old folders`);
+    await ssh.exec(`touch ${githubDir} && rm -rf ${githubDir}`, []);
 
     log("info", `mkdir ${githubDir} -p`);
     await ssh.exec(`mkdir ${githubDir} -p`, []);
