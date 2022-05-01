@@ -27,11 +27,8 @@ async function main () {
         core.info(`cd ${dir}`);
 
 
-
-        core.info(`${github.token}`);
-
-        ssh.destroy();
-        process.kill(12345);
+        core.info("Successfully deployed!");
+        core.setOutput("deployed", "true");
     });
 
     ssh.on("error", handleError);
