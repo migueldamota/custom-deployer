@@ -1,7 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 
-const SSH2 = require("ssh2-promise");
+const { NodeSSH } = require("node-ssh");
 
 process.on("unhandledRejection", handleError);
 main().catch(handleError);
@@ -13,34 +13,30 @@ async function main () {
         port = core.getInput("port"),
         privateKey = core.getInput("private-key");
 
-    const ssh = new SSH2({
+    const ssh = new NodeSSH();
+    await ssh.connect({
         host,
         username: user,
         port,
         password: core.getInput("password"),
     });
-    await ssh.connect();
 
-    ssh.on("ssh", async function (status) {
-        if (status === "connect") {
-            const { runNumber: run } = github.context;
+    const { runNumber: run } = github.context;
 
-            const sshURL = github.context.payload.repository.ssh_url;
+    const sshURL = github.context.payload.repository.ssh_url;
 
-            const directory = `${dir}/${run}`;
+    const directory = `${dir}/${run}`;
 
-            core.startGroup("Create folders");
-            await ssh.exec(`mkdir ${directory} -p`);
-            await ssh.exec(`cd ${directory}`);
-            core.endGroup();
+    core.startGroup("Create folders");
+    await ssh.exec(`mkdir ${directory} -p`);
+    await ssh.exec(`cd ${directory}`);
+    core.endGroup();
 
-            core.startGroup("Deployed");
-            await ssh.close();
-            core.info("Successfully deployed!");
-            core.setOutput("deployed", "true");
-            core.endGroup();
-        }
-    });
+    core.startGroup("Deployed");
+    await ssh.dispose();
+    core.info("Successfully deployed!");
+    core.setOutput("deployed", "true");
+    core.endGroup();
 }
 
 function handleError (error) {

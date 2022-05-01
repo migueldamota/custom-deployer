@@ -12,11 +12,12 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@actions/github": "^5.0.1",
-    "ssh2": "^1.10.0",
-    "ssh2-promise": "^1.0.2"
+    "node-ssh": "^12.0.4",
+    "ssh2": "^1.10.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.30",
+    "@types/node-ssh": "^7.0.1",
     "@types/ssh2": "^0.5.52"
   },
   "engines": {
