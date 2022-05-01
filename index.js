@@ -21,26 +21,26 @@ async function main () {
     });
     await ssh.connect();
 
-    ssh.on("ready", async function () {
-        const { runNumber: run } = github.context;
+    ssh.on("ssh", async function (status) {
+        if (status === "connect") {
+            const { runNumber: run } = github.context;
 
-        const sshURL = github.context.payload.repository.ssh_url;
+            const sshURL = github.context.payload.repository.ssh_url;
 
-        const directory = `${dir}/${run}`;
+            const directory = `${dir}/${run}`;
 
-        core.startGroup("Create folders");
-        await ssh.exec(`mkdir ${directory} -p`);
-        await ssh.exec(`cd ${directory}`);
-        core.endGroup();
+            core.startGroup("Create folders");
+            await ssh.exec(`mkdir ${directory} -p`);
+            await ssh.exec(`cd ${directory}`);
+            core.endGroup();
 
-        core.startGroup("Deployed");
-        await ssh.close();
-        core.info("Successfully deployed!");
-        core.setOutput("deployed", "true");
-        core.endGroup();
+            core.startGroup("Deployed");
+            await ssh.close();
+            core.info("Successfully deployed!");
+            core.setOutput("deployed", "true");
+            core.endGroup();
+        }
     });
-
-    ssh.on("error", handleError);
 }
 
 function handleError (error) {
