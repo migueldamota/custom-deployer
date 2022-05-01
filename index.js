@@ -26,9 +26,11 @@ async function main () {
         core.info(`mkdir ${dir} -p`);
         core.info(`cd ${dir}`);
 
-        
+
 
         core.info(`${github.token}`);
+
+        core.setOutput("Deployed!");
     });
 
     ssh.on("error", (error) => {
