@@ -28,8 +28,8 @@ async function main () {
     const directory = `${dir}/${run}`;
 
     core.startGroup("Create folders");
-    await ssh.exec(`mkdir ${directory} -p`);
-    await ssh.exec(`cd ${directory}`);
+    await ssh.exec(`mkdir ${directory} -p`, []);
+    await ssh.exec(`cd ${directory}`, []);
     core.endGroup();
 
     core.startGroup("Deployed");
