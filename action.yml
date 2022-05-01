@@ -26,6 +26,10 @@ inputs:
     default: 22
     description: Port
 
+  token:
+    required: true
+    description: GitHub token
+
 runs:
   using: 'node16'
   main: index.js
