@@ -15,18 +15,12 @@ async function main () {
         privateKey = core.getInput("private-key"),
         token = core.getInput("token");
 
-    core.startGroup("Connecting to SSH");
+    log("info", "Connecting to SSH");
     const ssh = new NodeSSH();
-    await ssh.connect({
-        host,
-        username: user,
-        port,
-        password: core.getInput("password"),
-    });
-    core.endGroup();
+    await ssh.connect({ host, username: user, port, password: core.getInput("password") });
 
     const { runNumber: run } = github.context;
-    const sshURL = github.context.payload.repository.ssh_url;
+    const repoURL = `https://${github.context.repo.owner}:${token}@github.com/${github.context.repo.owner}/${github.context.repo.repo}`;
     const directory = `${dir}/${run}`;
 
     core.startGroup("[deploy:setup] Setup deploy");
@@ -38,7 +32,7 @@ async function main () {
 
     core.startGroup("[deploy:setup_github] Setup GitHub");
     const githubDir = `${dir}/github`;
-    
+
     log("info", `clearing old folders`);
     await ssh.exec(`touch ${githubDir} && rm -rf ${githubDir}`, []);
 
@@ -47,7 +41,7 @@ async function main () {
 
     // const branchName = github.context.ref.substring(11);
     log("info", `cloning repo (${github.context.repo.owner}/${github.context.repo.repo})`);
-    await ssh.exec(`git clone https://${github.context.repo.owner}:${token}@github.com/${github.context.repo.owner}/${github.context.repo.repo} ${githubDir}`, [], { stream: "stderr" }, (data) => {
+        await ssh.exec(`git clone ${repoURL} ${githubDir}`, [], { stream: "stderr" }, (data) => {
         console.log(data);
     });
     core.endGroup();
