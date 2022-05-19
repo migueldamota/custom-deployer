@@ -1,7 +1,8 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 
-const styles = require("ansi-styles");
+const colors = require("colors");
+colors.enable();
 const { NodeSSH } = require("node-ssh");
 
 process.on("unhandledRejection", handleError);
@@ -70,5 +71,6 @@ function handleError (error) {
 }
 
 function log (type, message) {
-    core[type](`${styles.gray.open}[${styles.green.open}DEPLOY${styles.gray.open}] ${styles.reset.open}${message}`);
+    core[type](["[".gray,"DEPLOY".green,"] ".gray,message].join("");
 }
+
