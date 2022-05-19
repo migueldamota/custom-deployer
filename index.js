@@ -71,6 +71,6 @@ function handleError (error) {
 }
 
 function log (type, message) {
-    core[type](["[".gray,"DEPLOY".green,"] ".gray,message].join("");
+    core[type](["[".gray,"DEPLOY".green,"] ".gray,message].join(""));
 }
 
