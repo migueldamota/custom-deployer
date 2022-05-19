@@ -11,7 +11,7 @@
   "dependencies": {
     "@actions/core": "^1.8.0",
     "@actions/github": "^5.0.1",
-    "ansi-styles": "^5.2.0",
+    "colors": "^1.4.0",
     "node-ssh": "^12.0.4"
   },
   "devDependencies": {
