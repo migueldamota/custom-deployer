@@ -13,7 +13,8 @@ async function main () {
         user = core.getInput("user"),
         port = core.getInput("port"),
         privateKey = core.getInput("private-key"),
-        token = core.getInput("token");
+        token = core.getInput("token"),
+        type = core.getInput("type").toLowerCase();
 
     const afterDeploy = core.getInput("after_deploy");
 
@@ -33,7 +34,7 @@ async function main () {
     core.endGroup();
 
     core.startGroup("[deploy:setup_github] Setup GitHub");
-    const githubDir = `${dir}/.deploy`;
+    const githubDir = `${directory}/.github`;
 
     log("info", `clearing old folders`);
     await ssh.exec(`touch ${githubDir} && rm -rf ${githubDir}`, []);
@@ -48,9 +49,21 @@ async function main () {
     });
     core.endGroup();
 
+    if (type === "react") {
+        // install npm dependencies for type `react`
+        await ssh.exec(`cd ${githubDir} && npm install && npm run build`, []);
+    }
+
     core.startGroup("[deploy:move_files] Move files to current release");
-    log("info", `cp -r ${githubDir}/* ${directory}`);
-    await ssh.exec(`cp -r ${githubDir}/* ${directory}`, []);
+
+    if (type === "react") {
+        log("info", `cp -r ${githubDir}/build/* ${directory}`);
+        await ssh.exec(`cp -r ${githubDir}/build/* ${directory}`, []);
+    } else {
+        log("info", `cp -r ${githubDir}/* ${directory}`);
+        await ssh.exec(`cp -r ${githubDir}/* ${directory}`, []);
+    }
+
     core.endGroup();
 
     core.startGroup("[deploy:symlinks] Creating symlink");
@@ -66,6 +79,11 @@ async function main () {
         await ssh.exec(`cd ${dir}/current && ${afterDeploy}`, []);
         core.endGroup();
     }
+
+    core.startGroup("[deploy:symlinks] Cleanup");
+    log("info", `rm -rf ${directory}/.github`);
+    await ssh.exec(`rm -rf ${directory}/.github`, []);
+    core.endGroup();
 
     await ssh.dispose();
     log("info", "Disconnect from SSH");

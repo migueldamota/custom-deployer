@@ -33,6 +33,9 @@ inputs:
   after_deploy:
     description: Commands after deploy
 
+  type:
+    description: "Type of deployment (e.g: react)"
+
 runs:
   using: 'node16'
   main: index.js
