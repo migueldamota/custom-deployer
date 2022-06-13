@@ -49,14 +49,6 @@ async function main () {
     });
     core.endGroup();
 
-    if (type === "react") {
-        log("info", `cp -r ${githubDir}/build/* ${directory}`);
-        await ssh.exec(`cp -r ${githubDir}/build/* ${directory}`, []);
-    } else {
-        log("info", `cp -r ${githubDir}/* ${directory}`);
-        await ssh.exec(`cp -r ${githubDir}/* ${directory}`, []);
-    }
-
     core.startGroup("[deploy:react] Installing dependencies and build");
     if (type === "react") {
         // install npm dependencies for type `react`
