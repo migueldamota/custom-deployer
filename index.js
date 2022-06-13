@@ -5,12 +5,7 @@ const colors = require("colors");
 colors.enable();
 const { NodeSSH } = require("node-ssh");
 
-try {
-    main()
-} catch (error) {
-    log("error", error);
-    core.setFailed(`Unhandled error: ${error}`);
-}
+main();
 
 async function main () {
     const host = core.getInput("host"),
