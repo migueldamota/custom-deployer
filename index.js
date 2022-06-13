@@ -15,6 +15,8 @@ async function main () {
         privateKey = core.getInput("private-key"),
         token = core.getInput("token");
 
+    const afterDeploy = core.getInput("after_deploy");
+
     log("info", "Connecting to SSH");
     const ssh = new NodeSSH();
     await ssh.connect({ host, username: user, port, password: core.getInput("password") });
@@ -59,7 +61,10 @@ async function main () {
     core.endGroup();
 
     if (afterDeploy) {
-        await afterDeploy();
+        core.startGroup("[deploy:after_deploy] Running after deploy commands");
+        log("info", `${afterDeploy}`);
+        await ssh.exec(`cd ${dir}/current && ${afterDeploy}`, []);
+        core.endGroup();
     }
 
     await ssh.dispose();
@@ -70,13 +75,4 @@ async function main () {
 
 function log (type, message) {
     core[type](["[".gray,"DEPLOY".green,"] ".gray,message].join(""));
-}
-
-async function afterDeploy () {
-    const afterDeploy = core.getInput("after_deploy");
-
-    core.startGroup("[deploy:after_deploy] Running after deploy commands");
-    log("info", `${afterDeploy}`);
-    await ssh.exec(`cd ${dir}/current && ${afterDeploy}`, []);
-    core.endGroup();
 }
