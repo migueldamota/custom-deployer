@@ -62,6 +62,7 @@ async function main () {
 
     if (afterDeploy) {
         core.startGroup("[deploy:after_deploy] Running after deploy commands");
+        log("info", `cd ${dir}/current && ${afterDeploy}`);
         await ssh.exec(`cd ${dir}/current && ${afterDeploy}`, []);
     }
 
