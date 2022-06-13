@@ -33,7 +33,7 @@ async function main () {
     core.endGroup();
 
     core.startGroup("[deploy:setup_github] Setup GitHub");
-    const githubDir = `${dir}/github`;
+    const githubDir = `${dir}/.deploy`;
 
     log("info", `clearing old folders`);
     await ssh.exec(`touch ${githubDir} && rm -rf ${githubDir}`, []);
@@ -42,15 +42,15 @@ async function main () {
     await ssh.exec(`mkdir ${githubDir} -p`, []);
 
     // const branchName = github.context.ref.substring(11);
-    log("info", `cloning repo (${github.context.repo.owner}/${github.context.repo.repo})`);
+    log("info", `Cloning repo (${github.context.repo.owner}/${github.context.repo.repo})`);
         await ssh.exec(`git clone ${repoURL} ${githubDir}`, [], { stream: "stderr" }, (data) => {
         console.log(data);
     });
     core.endGroup();
 
     core.startGroup("[deploy:move_files] Move files to current release");
-    log("info", `mv $(ls ${githubDir} -A) ${directory}`);
-    await ssh.exec(`cd ${githubDir} && mv $(ls ${githubDir} -A) ${directory}`, []);
+    log("info", `cp -r ${githubDir}/* ${directory}`);
+    await ssh.exec(`cp -r ${githubDir}/* ${directory}`, []);
     core.endGroup();
 
     core.startGroup("[deploy:symlinks] Creating symlink");
