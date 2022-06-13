@@ -52,7 +52,11 @@ async function main () {
     core.startGroup("[deploy:react] Installing dependencies and build");
     if (type === "react") {
         // install npm dependencies for type `react`
-        await ssh.exec(`cd ${githubDir} && npm install --silent && npm run build`, []);
+        log("info", "Installing dependencies...");
+        await ssh.exec(`cd ${githubDir} && npm install --silent`, []);
+
+        log("info", "Building...");
+        await ssh.exec(`cd ${githubDir} && npm run build`, []);
     }
     core.endGroup();
 
