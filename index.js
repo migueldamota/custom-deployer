@@ -75,12 +75,8 @@ function log (type, message) {
 async function afterDeploy () {
     const afterDeploy = core.getInput("after_deploy");
 
-    try {
-        core.startGroup("[deploy:after_deploy] Running after deploy commands");
-        log("info", `${afterDeploy}`);
-        await ssh.exec(`cd ${dir}/current && ${afterDeploy}`, []);
-        core.endGroup();
-    } catch (error) {
-        log("warning", `Warning: ${error.message}`);
-    }
+    core.startGroup("[deploy:after_deploy] Running after deploy commands");
+    log("info", `${afterDeploy}`);
+    await ssh.exec(`cd ${dir}/current && ${afterDeploy}`, []);
+    core.endGroup();
 }
