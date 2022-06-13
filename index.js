@@ -5,8 +5,12 @@ const colors = require("colors");
 colors.enable();
 const { NodeSSH } = require("node-ssh");
 
-process.on("unhandledRejection", handleError);
-main();
+try {
+    main()
+} catch (error) {
+    log("error", error);
+    core.setFailed(`Unhandled error: ${error}`);
+}
 
 async function main () {
     const host = core.getInput("host"),
@@ -69,11 +73,6 @@ async function main () {
     core.setOutput("deployed", "true");
 }
 
-function handleError (error) {
-    log("error", error);
-    core.setFailed(`Unhandled error: ${error}`);
-}
-
 function log (type, message) {
     core[type](["[".gray,"DEPLOY".green,"] ".gray,message].join(""));
 }
@@ -85,6 +84,7 @@ async function afterDeploy () {
         core.startGroup("[deploy:after_deploy] Running after deploy commands");
         log("info", `${afterDeploy}`);
         await ssh.exec(`cd ${dir}/current && ${afterDeploy}`, []);
+        core.endGroup();
     } catch (error) {
         log("warning", `Warning: ${error.message}`);
     }
