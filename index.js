@@ -62,10 +62,8 @@ async function main () {
 
     if (afterDeploy) {
         core.startGroup("[deploy:after_deploy] Running after deploy commands");
-        // log("info", `cd ${dir}/current && ${afterDeploy}`);
-        log("info", `node -v`);
-        const test = await ssh.exec(`node -v`, [], { stream: "stdout" });
-        console.log(test);
+        log("info", `${afterDeploy}`);
+        await ssh.exec(`cd ${dir}/current && ${afterDeploy}`, []);
     }
 
     await ssh.dispose();
