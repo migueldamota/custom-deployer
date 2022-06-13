@@ -30,6 +30,9 @@ inputs:
     required: true
     description: GitHub token
 
+  after_deploy:
+    description: Commands after deploy
+
 runs:
   using: 'node16'
   main: index.js
