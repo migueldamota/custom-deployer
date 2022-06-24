@@ -63,11 +63,11 @@ async function main () {
     core.startGroup("[deploy:move_files] Move files to current release");
 
     if (type === "react") {
-        log("info", `cp -r ${githubDir}/build/* ${directory}`);
-        await ssh.exec(`cp -r ${githubDir}/build/* ${directory}`, []);
+        log("info", `cp -r ${githubDir}/build ${directory}`);
+        await ssh.exec(`cp -r ${githubDir}/build ${directory}`, []);
     } else {
-        log("info", `cp -r ${githubDir}/* ${directory}`);
-        await ssh.exec(`cp -r ${githubDir}/* ${directory}`, []);
+        log("info", `cp -r ${githubDir} ${directory}`);
+        await ssh.exec(`cp -r ${githubDir} ${directory}`, []);
     }
 
     core.endGroup();
@@ -82,7 +82,7 @@ async function main () {
     if (afterDeploy) {
         core.startGroup("[deploy:after_deploy] Running after deploy commands");
         log("info", `${afterDeploy}`);
-        await ssh.exec(`cd ${dir}/current && ${afterDeploy}`, []);
+        await ssh.execCommand(`cd ${dir}/current && ${afterDeploy}`);
         core.endGroup();
     }
 

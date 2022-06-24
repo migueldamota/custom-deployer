@@ -9,13 +9,13 @@
   "author": "Miguel da Mota <mixeus@zyneex.dev> (https://zyneex.dev/mixeus)",
   "license": "ISC",
   "dependencies": {
-    "@actions/core": "^1.8.0",
-    "@actions/github": "^5.0.1",
+    "@actions/core": "^1.9.0",
+    "@actions/github": "^5.0.3",
     "colors": "^1.4.0",
     "node-ssh": "^12.0.4"
   },
   "devDependencies": {
-    "@types/node": "^17.0.31",
+    "@types/node": "^18.0.0",
     "@types/node-ssh": "^7.0.1"
   },
   "engines": {
