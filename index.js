@@ -63,11 +63,11 @@ async function main () {
     core.startGroup("[deploy:move_files] Move files to current release");
 
     if (type === "react") {
-        log("info", `cp -r ${githubDir}/build ${directory}`);
-        await ssh.exec(`cp -r ${githubDir}/build ${directory}`, []);
+        log("info", `cp -r ${githubDir}/build/. ${directory}`);
+        await ssh.exec(`cp -r ${githubDir}/build/. ${directory}`, []);
     } else {
-        log("info", `cp -r ${githubDir} ${directory}`);
-        await ssh.exec(`cp -r ${githubDir} ${directory}`, []);
+        log("info", `cp -r ${githubDir}/. ${directory}`);
+        await ssh.exec(`cp -r ${githubDir}/. ${directory}`, []);
     }
 
     core.endGroup();
